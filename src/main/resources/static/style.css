@@ -82,7 +82,8 @@ li button {
 }
 
 .more-container p {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    text-align: justify;
 }
 
 .buttons-container {

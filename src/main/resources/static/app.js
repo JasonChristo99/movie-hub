@@ -4,85 +4,54 @@ function createListItem(details, currentMovie, list) {
     let genre = details.Genre;
     let runtime = details.Runtime;
     let plot = details.Plot;
-    let poster = details.Poster;
+    let posterUrl = details.Poster;
     let director = details.Director;
     let actors = details.Actors;
     let released = details.Released;
     let language = details.Language;
     let country = details.Country;
 
-    let item = document.createElement("li"); // Create a <li> node
-    item.setAttribute("id", currentMovie.imdbID);
+    // make list item from template
+    let template = document.getElementById("list-item-template");
+    // console.log("tmplt" + template);
+    let itemFromTemplate = template.content.querySelector("li");
+    // console.log("itemfromtmpl" + itemFromTemplate);
+    let newItem = document.importNode(itemFromTemplate, true);
+    // console.log("newitem" + newItem);
 
-    let resultContainer = document.createElement("div");
-    resultContainer.setAttribute("class", "result-container");
-
-    let posterImg = document.createElement("img");
-    if (poster !== "N/A") {
-        posterImg.setAttribute("src", currentMovie.Poster);
+    // set list item id
+    newItem.setAttribute("id", currentMovie.imdbID);
+    // set poster source
+    let poster = newItem.querySelector("img");
+    if (posterUrl !== "N/A") {
+        poster.setAttribute("src", currentMovie.Poster);
     } else {
-        posterImg.setAttribute("src", "noimage.png");
+        poster.setAttribute("src", "noimage.png");
     }
-    resultContainer.appendChild(posterImg);
-
-    let infoContainer = document.createElement("div");
-    infoContainer.setAttribute("class", "info-container");
-
-    let textTitle = document.createElement("p");
-    textTitle.setAttribute("class", "title");
+    // set title
+    let textTitle = newItem.querySelector(".title");
     textTitle.innerHTML = title;
-    infoContainer.appendChild(textTitle); // Add the title to <li>
-
-    let textDetails = document.createElement("p");
-    textDetails.setAttribute("class", "details");
+    // set details
+    let textDetails = newItem.querySelector(".details");
     textDetails.innerHTML = year + " / " + genre + " / " + runtime;
-    infoContainer.appendChild(textDetails); // Add the details to <li>
-
-    let textPlot = document.createElement("p");
-    textPlot.setAttribute("class", "plot")
+    // set plot
+    let textPlot = newItem.querySelector(".plot");
     textPlot.innerHTML = plot;
-    infoContainer.appendChild(textPlot); // Add the (short) plot to <li>
+    // set director (more)
+    let textDirector = newItem.querySelector(".director");
+    textDirector.innerHTML += director;
+    // set actors (more)
+    let textActors = newItem.querySelector(".actors");
+    textActors.innerHTML += actors;
+    // set country (more)
+    let textCountry = newItem.querySelector(".country");
+    textCountry.innerHTML += country;
+    // set language (more)
+    let textLanguage = newItem.querySelector(".language");
+    textLanguage.innerHTML += language;
 
-    let buttonsContainer = document.createElement("div");
-    buttonsContainer.setAttribute("class", "buttons-container");
-
-    let moreButton = document.createElement("button");
-    moreButton.setAttribute("class", "more-btn");
-    moreButton.innerText = "Show more";
-    buttonsContainer.appendChild(moreButton); // Add the button to <li>
-
-    let favoriteButton = document.createElement("button");
-    favoriteButton.setAttribute("class", "favBtn");
-    favoriteButton.innerText = "Favorite";
-    buttonsContainer.appendChild(favoriteButton); // Add the button to <li>
-
-    infoContainer.appendChild(buttonsContainer);
-
-    resultContainer.appendChild(infoContainer);
-
-    let moreContainer = document.createElement("div");
-    moreContainer.setAttribute("class", "more-container");
-    moreContainer.style.display = "none";
-
-    let textDirector = document.createElement("p");
-    textDirector.innerText = "Director: " + director;
-    moreContainer.appendChild(textDirector);
-
-    let textActors = document.createElement("p");
-    textActors.innerText = "Actors: " + actors;
-    moreContainer.appendChild(textActors);
-
-    let textLanguage = document.createElement("p");
-    textLanguage.innerText = "Language: " + language;
-    moreContainer.appendChild(textLanguage);
-
-    let plotFull = document.createElement("p");
-    plotFull.setAttribute("class", "plot-full");
-    moreContainer.appendChild(plotFull);
-
-    item.appendChild(resultContainer);
-    item.appendChild(moreContainer);
-    list.appendChild(item); // Add item to the list
+    // add item to list
+    list.appendChild(newItem);
 }
 
 function showResults(results) {
@@ -107,7 +76,6 @@ function showResults(results) {
 }
 
 function showResultsOfCurrentPage() {
-    console.log("page is " + page);
     // Make AJAX request to get the results
     const request = new XMLHttpRequest();
     request.open("GET", "http://localhost:8080/movies/search?term=" + term + "&page=" + page, true);
@@ -129,7 +97,7 @@ function search() {
     // Declare variables
     let input = document.getElementById('input-term');
     term = input.value.toLowerCase().replace(" ", "+");
-    console.log("term is " + term);
+
     let list = document.getElementById("result-list");
     let moreResultsBtn = document.querySelector(".more-results-btn");
 
@@ -223,11 +191,26 @@ function showMoreResults() {
     showResultsOfCurrentPage();
 }
 
+function setSearchListener() {
+    //setup before functions
+    let typingTimer;                //timer identifier
+    let doneTypingInterval = 200;  //time in ms
+    let input = document.getElementById('input-term');
+
+    //on keyup, start the countdown
+    input.addEventListener('keyup', () => {
+        clearTimeout(typingTimer);
+        if (input.value) {
+            typingTimer = setTimeout(search, doneTypingInterval);
+        }
+    });
+}
+
 window.onload = function () {
     setShowMoreListener();
+    setSearchListener();
     // setScrollListener();
 }
 
 var term, page;
-
 

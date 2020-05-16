@@ -13,9 +13,33 @@
     <p>Start typing below to search.</p>
 </div>
 
-<input type="text" id="input-term" onkeyup="search()" placeholder="Search for movies..">
+<input type="text" id="input-term" placeholder="Search for movies..">
 
 <ul id="result-list"></ul>
+
+<template id="list-item-template">
+    <li id="">
+        <div class="result-container">
+            <img src="">
+            <div class="info-container">
+                <p class="title"></p>
+                <p class="details"></p>
+                <p class="plot"></p>
+                <div class="buttons-container">
+                    <button class="more-btn">Show more</button>
+                    <button class="favBtn">Favorite</button>
+                </div>
+            </div>
+        </div>
+        <div class="more-container" style="display: none;">
+            <p class="director">Director: </p>
+            <p class="actors">Actors: </p>
+            <p class="country">Country: </p>
+            <p class="language">Language: </p>
+            <p class="plot-full"></p>
+        </div>
+    </li>
+</template>
 
 <button class="more-results-btn" onclick="showMoreResults()">Show more results</button>
 

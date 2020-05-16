@@ -6,9 +6,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 @RestController
 public class MoviesController {
-    //    private String apiUrl = "http://www.omdbapi.com/?apikey=5b059748&";
-    private String apiUrlBySearch = "http://www.omdbapi.com/?apikey=5b059748&s={term}&page={page}";
-    private String apiUrlById = "http://www.omdbapi.com/?apikey=5b059748&i={id}&plot={plot}";
+    // String apiKey = "5b059748";
+    String apiKey = "123d465";
+    private String apiUrlBySearch = "http://www.omdbapi.com/?apikey=" + apiKey + "&s={term}&page={page}";
+    private String apiUrlById = "http://www.omdbapi.com/?apikey=" + apiKey + "&i={id}&plot={plot}";
 
 
     @GetMapping("/movies/search") // ?term={term}&page={page}
