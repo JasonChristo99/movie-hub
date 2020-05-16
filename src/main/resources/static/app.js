@@ -1,6 +1,4 @@
 function createListItem(details, currentMovie, list) {
-    // Typical action to be performed when the document is ready:
-
     let title = details.Title;
     let year = details.Year;
     let genre = details.Genre;
@@ -91,51 +89,61 @@ function showResults(results) {
     // Declare variables
     let list = document.getElementById("result-list");
 
-    list.innerHTML = '';
-
     for (let movie in results) {
+
         let currentMovie = results[movie];
 
         // Make AJAX request to get the detailed results
         const request = new XMLHttpRequest();
-        request.open("GET", "http://localhost:8080/movies/id/" + currentMovie.imdbID + "&", true);
+        request.open("GET", "http://localhost:8080/movies/id/" + currentMovie.imdbID, true);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
-                // console.log("");
                 let details = JSON.parse(request.responseText);
                 createListItem(details, currentMovie, list);
             }
         }
         request.send();
-
-
     }
 }
 
-function search() {
-    // Declare variables
-    let input = document.getElementById('input-term');
-    let term = input.value.toLowerCase().replace(" ", "+");
-
-    if (term.length < 4) {
-        return;
-    }
-
+function showResultsOfCurrentPage() {
+    console.log("page is " + page);
     // Make AJAX request to get the results
     const request = new XMLHttpRequest();
-    request.open("GET", "http://localhost:8080/movies/" + term, true);
+    request.open("GET", "http://localhost:8080/movies/search?term=" + term + "&page=" + page, true);
     request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200) {
             // Show movie results when the api responds
             let response = JSON.parse(request.responseText);
             let results = response.Search;
             if (results) {
-                // console.log("got results")
+                page++;
                 showResults(results);
             }
         }
     };
     request.send();
+}
+
+function search() {
+    // Declare variables
+    let input = document.getElementById('input-term');
+    term = input.value.toLowerCase().replace(" ", "+");
+    console.log("term is " + term);
+    let list = document.getElementById("result-list");
+    let moreResultsBtn = document.querySelector(".more-results-btn");
+
+    if (term.length < 4) {
+        return;
+    }
+
+    moreResultsBtn.style.display = "none";
+    list.innerHTML = '';
+
+    page = 1;
+    showResultsOfCurrentPage();
+
+    moreResultsBtn.style.display = "block";
 }
 
 
@@ -147,12 +155,12 @@ function toggleMore(id) {
     let fullPlot = document.querySelector("#" + id + " .plot-full");
 
     if (listItem.hasAttribute("class")) { // plot is already showing and then button is clicked
-        // console.log("has class");
+
         moreContainer.style.display = "none";
         listItem.removeAttribute("class");
         button.innerText = "Show more";
+
     } else { // plot is not showing and then button is clicked
-        // console.log("not has class");
 
         if (fullPlot.innerText !== '') {
             moreContainer.style.display = "block";
@@ -163,7 +171,7 @@ function toggleMore(id) {
 
         // Make AJAX request to get the results
         const request = new XMLHttpRequest();
-        request.open("GET", "http://localhost:8080/movies/id/" + id + "&" + "full", true);
+        request.open("GET", "http://localhost:8080/movies?id=" + id + "&plot=" + "full", true);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 // Typical action to be performed when the document is ready:
@@ -171,7 +179,6 @@ function toggleMore(id) {
                 let plot = details.Plot;
                 fullPlot.innerText = "Detailed plot: " + plot;
                 moreContainer.style.display = "flex";
-                console.log("inside");
                 listItem.setAttribute("class", "more");
                 button.innerText = "Show less";
 
@@ -188,15 +195,39 @@ function toggleMore(id) {
 function setShowMoreListener() {
     const list = document.getElementById("result-list");
     list.addEventListener("click", function (e) {
-        // console.log(e.target.parentNode.id);
         if (e.target.nodeName === "BUTTON" && e.target.className === "more-btn") {
             toggleMore(e.target.parentNode.parentNode.parentNode.parentNode.id);
         }
     });
 }
 
+// function setScrollListener() {
+//     window.onscroll = function () {
+//         var list = document.getElementById('result-list');
+//         var contentHeight = list.offsetHeight;
+//         var yOffset = window.pageYOffset;
+//         var y = yOffset + window.innerHeight;
+//         if (y >= contentHeight) {
+//             // Ajax call to get more dynamic data goes here
+//             window.scrollTo(0, 0);
+//             console.log("page is " + page);
+//             showResultsOfCurrentPage();
+//         }
+//     }
+// }
+
+function showMoreResults() {
+    if (page === undefined) {
+        return;
+    }
+    showResultsOfCurrentPage();
+}
+
 window.onload = function () {
     setShowMoreListener();
+    // setScrollListener();
 }
+
+var term, page;
 
 
