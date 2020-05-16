@@ -1,0 +1,97 @@
+body {
+    font-family: "Open Sans";
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}
+
+#input-term {
+    background-image: url('/searchicon.png'); /* Add a search icon to input */
+    background-size: 1rem;
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    width: 95%; /* Full-width */
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+}
+
+#result-list {
+    /* Remove default list styling */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#result-list li {
+    border: 1px solid #ddd; /* Add a border to all links */
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #f6f6f6; /* Grey background color */
+    padding: 15px; /* Add some padding */
+    text-decoration: none; /* Remove default text underline */
+    /*font-size: 18px; !* Increase the font-size *!*/
+    color: black; /* Add a black text color */
+    /*display: grid;*/
+    /*grid-template-columns: 20% 60% auto;*/
+    /*justify-content: space-evenly;*/
+    /*grid-column-gap: 25px;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+/*#result-list li a:hover:not(.header) {*/
+/*    background-color: #eee; !* Add a hover effect to all links, except for headers *!*/
+/*}*/
+
+.welcome-msg {
+    text-align: center;
+    margin: 20px;
+}
+
+li img {
+    max-width: 10rem;
+    margin: 15px;
+
+}
+
+li .title {
+    font-size: 1.5rem;
+}
+
+li button {
+    border: none;
+    background: lightskyblue;
+    color: white;
+    font-weight: 100;
+    padding: 5px 15px 5px 15px;
+    border-radius: 6px;
+    align-self: center;
+    cursor: pointer;
+    margin: 5px;
+}
+
+
+.info-container {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+}
+
+.result-container {
+    display: flex;
+}
+
+.more-container {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    padding: 15px;
+}
+
+.buttons-container {
+    display: flex;
+    justify-content: flex-start;
+    width: 20rem;
+}
