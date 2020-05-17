@@ -169,20 +169,29 @@ function setShowMoreListener() {
     });
 }
 
-// function setScrollListener() {
-//     window.onscroll = function () {
-//         var list = document.getElementById('result-list');
-//         var contentHeight = list.offsetHeight;
-//         var yOffset = window.pageYOffset;
-//         var y = yOffset + window.innerHeight;
-//         if (y >= contentHeight) {
-//             // Ajax call to get more dynamic data goes here
-//             window.scrollTo(0, 0);
-//             console.log("page is " + page);
-//             showResultsOfCurrentPage();
-//         }
-//     }
-// }
+function setScrollListener() {
+    //setup before functions
+    let typingTimer;                //timer identifier
+    let doneTypingInterval = 200;  //time in ms
+
+    //on keyup, start the countdown
+    window.onscroll = function () {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(function () {
+            var list = document.getElementById('result-list');
+            var contentHeight = list.offsetHeight;
+            var yOffset = window.pageYOffset;
+            var y = yOffset + window.innerHeight;
+            if (y >= contentHeight) {
+                // Ajax call to get more dynamic data goes here
+                // window.scrollTo(0, 0);
+                console.log("page is " + page);
+                showResultsOfCurrentPage();
+            }
+        }, doneTypingInterval);
+
+    }
+}
 
 function showMoreResults() {
     if (page === undefined) {
@@ -209,7 +218,7 @@ function setSearchListener() {
 window.onload = function () {
     setShowMoreListener();
     setSearchListener();
-    // setScrollListener();
+    setScrollListener();
 }
 
 var term, page;
