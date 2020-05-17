@@ -99,19 +99,16 @@ function search() {
     term = input.value.toLowerCase().replace(" ", "+");
 
     let list = document.getElementById("result-list");
-    let moreResultsBtn = document.querySelector(".more-results-btn");
 
     if (term.length < 4) {
         return;
     }
 
-    moreResultsBtn.style.display = "none";
     list.innerHTML = '';
 
     page = 1;
     showResultsOfCurrentPage();
 
-    moreResultsBtn.style.display = "block";
 }
 
 
@@ -172,7 +169,7 @@ function setShowMoreListener() {
 function setScrollListener() {
     //setup before functions
     let typingTimer;                //timer identifier
-    let doneTypingInterval = 200;  //time in ms
+    let doneTypingInterval = 100;  //time in ms
 
     //on keyup, start the countdown
     window.onscroll = function () {
