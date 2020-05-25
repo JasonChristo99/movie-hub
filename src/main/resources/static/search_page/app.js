@@ -26,7 +26,7 @@ function createListItem(details, currentMovie, list) {
     if (posterUrl !== "N/A") {
         poster.setAttribute("src", currentMovie.Poster);
     } else {
-        poster.setAttribute("src", "noimage.png");
+        poster.setAttribute("src", "search_page/noimage.png");
     }
     // set title
     let textTitle = newItem.querySelector(".title");
