@@ -111,7 +111,6 @@ function search() {
 
 }
 
-
 function toggleMore(id) {
     // Change text on click
     let listItem = document.getElementById(id);
@@ -152,9 +151,6 @@ function toggleMore(id) {
         request.send();
 
     }
-
-
-    // console.log(plot);
 }
 
 function setShowMoreListener() {
@@ -188,13 +184,6 @@ function setScrollListener() {
         }, doneTypingInterval);
 
     }
-}
-
-function showMoreResults() {
-    if (page === undefined) {
-        return;
-    }
-    showResultsOfCurrentPage();
 }
 
 function setSearchListener() {

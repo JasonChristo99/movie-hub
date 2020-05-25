@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="app.js"></script>
+</head>
+<body>
+<h1>Please login.</h1>
+<p>Provide your email and password below.</p>
+
+<form action="http://localhost:8080/login" method="post">
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email"><br><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password"><br><br>
+    <input type="submit" value="Login">
+    <p>Don't have an account? Please <a href="../register_page/register.html">sign up here</a></p>
+</form>
+
+</body>
+</html>

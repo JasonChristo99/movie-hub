@@ -25,8 +25,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -39,6 +39,10 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
     </dependencies>
 
