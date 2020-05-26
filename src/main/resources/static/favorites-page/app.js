@@ -1,9 +1,9 @@
 function getFavoriteMoviesOfUser() {
     const request = new XMLHttpRequest();
-    request.open("GET", "/favorites/" + activeUserId, true);
+    request.open("GET", "/favorites/" + activeUserId + "/all", true);
     request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200) {
-            movieList = JSON.parse(request.responseText);
+            favoriteMovies = JSON.parse(request.responseText);
             showMovies();
         }
     }
@@ -78,10 +78,10 @@ function createListItem(details, currentMovie, list) {
 
 function showMovies() {
     let list = document.getElementById("result-list");
+    list.innerHTML='';
+    for (let movie in favoriteMovies) {
 
-    for (let movie in movieList) {
-
-        let currentMovieId = movieList[movie].movieId;
+        let currentMovieId = favoriteMovies[movie].movieId;
 
         // Make AJAX request to get the detailed results
         const request = new XMLHttpRequest();
@@ -97,7 +97,15 @@ function showMovies() {
 }
 
 function deleteFromFavorites(id) {
-
+    // Make AJAX request to get the detailed results
+    const request = new XMLHttpRequest();
+    request.open("DELETE", "/favorites/" + activeUserId + "/" + id, true);
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            getFavoriteMoviesOfUser();
+        }
+    }
+    request.send();
 }
 
 function toggleMore(id) {
@@ -158,4 +166,4 @@ window.onload = function () {
     setMoreAndDeleteListener();
 }
 
-var activeUserId, movieList;
+var activeUserId, favoriteMovies;

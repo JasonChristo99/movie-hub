@@ -35,8 +35,15 @@ public class FavoritesController {
         return this.favoriteRepository.findAll();
     }
 
-    @GetMapping(value = "/favorites/{id}")
-    public List<Favorite> getFavorites(@PathVariable(value = "id") String id) {
-        return this.favoriteRepository.findByUserId(Long.parseLong(id));
+    @GetMapping(value = "/favorites/{userId}/all")
+    public List<Favorite> getFavorites(@PathVariable(value = "userId") String userId) {
+        return this.favoriteRepository.findByUserId(Long.parseLong(userId));
+    }
+
+    @DeleteMapping(value = "/favorites/{userId}/{movieId}")
+    public void deleteFavorite(@PathVariable(value = "userId") String userId, @PathVariable(value = "movieId") String movieId) {
+        System.out.println("Exists " + userId + " / " + movieId + "  ? " + this.favoriteRepository.findByUserIdAndMovieId(Long.parseLong(userId), movieId));
+        Favorite favorite = this.favoriteRepository.findByUserIdAndMovieId(Long.parseLong(userId), movieId);
+        this.favoriteRepository.deleteById(favorite.getId());
     }
 }
