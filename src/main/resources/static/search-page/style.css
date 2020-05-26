@@ -94,6 +94,10 @@ li button {
     margin: 5px;
 }
 
+li button:hover {
+    background-color: deepskyblue;
+}
+
 .info-container {
     display: flex;
     flex-direction: column;

@@ -11,6 +11,7 @@ import java.util.List;
 
 @RestController
 public class FavoritesController {
+
     @Autowired
     private final FavoriteRepository favoriteRepository;
 
@@ -42,8 +43,9 @@ public class FavoritesController {
 
     @DeleteMapping(value = "/favorites/{userId}/{movieId}")
     public void deleteFavorite(@PathVariable(value = "userId") String userId, @PathVariable(value = "movieId") String movieId) {
-        System.out.println("Exists " + userId + " / " + movieId + "  ? " + this.favoriteRepository.findByUserIdAndMovieId(Long.parseLong(userId), movieId));
+        System.out.println("Delete favorite request: user " + userId + ", " + movieId);
         Favorite favorite = this.favoriteRepository.findByUserIdAndMovieId(Long.parseLong(userId), movieId);
-        this.favoriteRepository.deleteById(favorite.getId());
+        this.favoriteRepository.deleteByUserIdAndMovieId(favorite.getUserId(), favorite.getMovieId());
+        System.out.println("Favorite deleted");
     }
 }

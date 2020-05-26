@@ -35,6 +35,7 @@ function createListItem(details, currentMovie, list) {
     let released = details.Released;
     let language = details.Language;
     let country = details.Country;
+    let imdbRating = details.Ratings[0].Value;
 
     // make list item from template
     let template = document.getElementById("list-item-template");
@@ -71,6 +72,9 @@ function createListItem(details, currentMovie, list) {
     // set language (more)
     let textLanguage = newItem.querySelector(".language");
     textLanguage.innerHTML += language;
+    // set rating (more)
+    let textRating = newItem.querySelector(".rating");
+    textRating.innerHTML += imdbRating;
 
     // add item to list
     list.appendChild(newItem);
@@ -114,7 +118,7 @@ function toggleMore(id) {
     let button = document.querySelector("#" + id + " .more-btn");
     let moreContainer = document.querySelector("#" + id + " .more-container");
     let fullPlot = document.querySelector("#" + id + " .plot-full");
-console.log('toggled id '+id);
+
     if (listItem.hasAttribute("class")) { // plot is already showing and then button is clicked
 
         moreContainer.style.display = "none";

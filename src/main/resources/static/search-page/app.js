@@ -10,6 +10,7 @@ function createListItem(details, currentMovie, list) {
     let released = details.Released;
     let language = details.Language;
     let country = details.Country;
+    let imdbRating = details.Ratings[0].Value;
 
     // make list item from template
     let template = document.getElementById("list-item-template");
@@ -46,6 +47,9 @@ function createListItem(details, currentMovie, list) {
     // set language (more)
     let textLanguage = newItem.querySelector(".language");
     textLanguage.innerHTML += language;
+    // set rating (more)
+    let textRating = newItem.querySelector(".rating");
+    textRating.innerHTML += imdbRating;
 
     // add item to list
     list.appendChild(newItem);
