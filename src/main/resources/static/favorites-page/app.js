@@ -24,6 +24,7 @@ function getActiveUser() {
 
 function createListItem(details, currentMovie, list) {
     let title = details.Title;
+    let imdbID = details.imdbID;
     let year = details.Year;
     let genre = details.Genre;
     let runtime = details.Runtime;
@@ -41,7 +42,7 @@ function createListItem(details, currentMovie, list) {
     let newItem = document.importNode(itemFromTemplate, true);
 
     // set list item id
-    newItem.setAttribute("id", currentMovie.imdbID);
+    newItem.setAttribute("id", imdbID);
     // set poster source
     let poster = newItem.querySelector("img");
     if (posterUrl !== "N/A") {
@@ -105,7 +106,7 @@ function toggleMore(id) {
     let button = document.querySelector("#" + id + " .more-btn");
     let moreContainer = document.querySelector("#" + id + " .more-container");
     let fullPlot = document.querySelector("#" + id + " .plot-full");
-
+console.log('toggled id '+id);
     if (listItem.hasAttribute("class")) { // plot is already showing and then button is clicked
 
         moreContainer.style.display = "none";
