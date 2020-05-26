@@ -2,18 +2,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome</title>
-    <link rel="stylesheet" type="text/css" href="search_page/style.css">
-    <script src="search_page/app.js"></script>
+    <title>Favorites</title>
+    <link rel="stylesheet" type="text/css" href="search-page/style.css">
+    <script src="favorites-page/app.js"></script>
 </head>
 <body>
 
-<div class="welcome-msg">
-    <h1>Welcome!</h1>
-    <p>Start typing below to search.</p>
+<div class="topnav">
+    <a id="home" href="/search_page">Home</a>
+    <a id="favorites" href="/favorites_page">Favorites</a>
+    <a id="logout" href="/logout">Logout ⇨</a>
 </div>
 
-<input type="text" id="input-term" placeholder="Search for movies..">
+<div class="welcome-msg">
+    <h1>Favorites</h1>
+    <p>These are your favorite movies.</p>
+</div>
+
 
 <ul id="result-list"></ul>
 
@@ -27,7 +32,7 @@
                 <p class="plot"></p>
                 <div class="buttons-container">
                     <button class="more-btn">Show more</button>
-                    <button class="favBtn">Favorite</button>
+                    <button class="del-btn">Delete</button>
                 </div>
             </div>
         </div>

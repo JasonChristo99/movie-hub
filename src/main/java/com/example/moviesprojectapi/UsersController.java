@@ -20,26 +20,26 @@ public class UsersController {
     }
 
     @PostMapping(value = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<HttpStatus> login(@RequestParam(value = "email") String email,
-                                            @RequestParam(value = "password") String password,
-                                            HttpServletResponse httpResponse) {
-        System.out.println("Login request { " + email + ", " + password + " / " + PasswordEncryptor.toSHA1(password) + " } ");
+    public ResponseEntity<HttpStatus> loginUser(@RequestParam(value = "email") String email,
+                                                @RequestParam(value = "password") String password,
+                                                HttpServletResponse httpResponse) {
+        System.out.println("Login request { " + email + " / " + PasswordEncryptor.toSHA1(password) + " } ");
         User resultUser = this.userRepository.findByEmailAndPassword(email, PasswordEncryptor.toSHA1(password));
         if (resultUser != null) {
             System.out.println("Login success");
             SessionDetails.setActiveUserId(resultUser.getId());
-            System.out.println("Redirecting " + SessionDetails.getActiveUserId() + " to search page...");
+            System.out.println("Redirecting user " + SessionDetails.getActiveUserId() + " to search page...");
             try {
-                httpResponse.sendRedirect("/search");
+                httpResponse.sendRedirect("/search_page");
+                return new ResponseEntity<HttpStatus>(HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
                 return new ResponseEntity<HttpStatus>(HttpStatus.SERVICE_UNAVAILABLE);
             }
-            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } else {
             System.out.println("Login fail");
             try {
-                httpResponse.sendRedirect("/");
+                httpResponse.sendRedirect("/login_page");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -48,10 +48,10 @@ public class UsersController {
     }
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<HttpStatus> register(@RequestParam(value = "email") String email,
-                                               @RequestParam(value = "password") String password,
-                                               HttpServletResponse httpResponse) {
-        System.out.println("Register request { " + email + ", " + password + " / " + PasswordEncryptor.toSHA1(password) + " } ");
+    public ResponseEntity<HttpStatus> registerUser(@RequestParam(value = "email") String email,
+                                                   @RequestParam(value = "password") String password,
+                                                   HttpServletResponse httpResponse) {
+        System.out.println("Register request { " + email + ", " + PasswordEncryptor.toSHA1(password) + " } ");
         if (this.userRepository.findByEmail(email) != null) {
             System.out.println("Register failed");
             try {
@@ -65,19 +65,19 @@ public class UsersController {
             this.userRepository.save(user);
             System.out.println("Register success");
             SessionDetails.setActiveUserId(user.getId());
-            System.out.println("Redirecting " + SessionDetails.getActiveUserId() + " to search page...");
+            System.out.println("Redirecting user " + SessionDetails.getActiveUserId() + " to search page...");
             try {
-                httpResponse.sendRedirect("/search");
+                httpResponse.sendRedirect("/search_page");
+                return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
             } catch (IOException e) {
                 e.printStackTrace();
                 return new ResponseEntity<HttpStatus>(HttpStatus.SERVICE_UNAVAILABLE);
             }
-            return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
         }
     }
 
-    @GetMapping(value = "/users")
-    public Iterable<User> users() {
+    @GetMapping(value = "/users/all")
+    public Iterable<User> getUsers() {
         return this.userRepository.findAll();
     }
 
@@ -91,11 +91,17 @@ public class UsersController {
         System.out.println("Redirecting to login page...");
         SessionDetails.clearActiveUser();
         try {
-            httpResponse.sendRedirect("/");
+            httpResponse.sendRedirect("/login_page");
+            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
             return new ResponseEntity<HttpStatus>(HttpStatus.SERVICE_UNAVAILABLE);
         }
-        return new ResponseEntity<HttpStatus>(HttpStatus.OK);
     }
+
+    @GetMapping(value = "users/active")
+    public long getActiveUser() {
+        return SessionDetails.getActiveUserId();
+    }
+
 }

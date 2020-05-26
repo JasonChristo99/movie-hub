@@ -1,3 +1,27 @@
+function getFavoriteMoviesOfUser() {
+    const request = new XMLHttpRequest();
+    request.open("GET", "/favorites/" + activeUserId, true);
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            movieList = JSON.parse(request.responseText);
+            showMovies();
+        }
+    }
+    request.send();
+}
+
+function getActiveUser() {
+    const request = new XMLHttpRequest();
+    request.open("GET", "/users/active", true);
+    request.onreadystatechange = function () {
+        if (request.readyState === 4 && request.status === 200) {
+            activeUserId = request.responseText;
+            getFavoriteMoviesOfUser();
+        }
+    }
+    request.send();
+}
+
 function createListItem(details, currentMovie, list) {
     let title = details.Title;
     let year = details.Year;
@@ -13,18 +37,15 @@ function createListItem(details, currentMovie, list) {
 
     // make list item from template
     let template = document.getElementById("list-item-template");
-    // console.log("tmplt" + template);
     let itemFromTemplate = template.content.querySelector("li");
-    // console.log("itemfromtmpl" + itemFromTemplate);
     let newItem = document.importNode(itemFromTemplate, true);
-    // console.log("newitem" + newItem);
 
     // set list item id
     newItem.setAttribute("id", currentMovie.imdbID);
     // set poster source
     let poster = newItem.querySelector("img");
     if (posterUrl !== "N/A") {
-        poster.setAttribute("src", currentMovie.Poster);
+        poster.setAttribute("src", posterUrl);
     } else {
         poster.setAttribute("src", "search_page/noimage.png");
     }
@@ -54,60 +75,27 @@ function createListItem(details, currentMovie, list) {
     list.appendChild(newItem);
 }
 
-function showResults(results) {
-    // Declare variables
+function showMovies() {
     let list = document.getElementById("result-list");
 
-    for (let movie in results) {
+    for (let movie in movieList) {
 
-        let currentMovie = results[movie];
+        let currentMovieId = movieList[movie].movieId;
 
         // Make AJAX request to get the detailed results
         const request = new XMLHttpRequest();
-        request.open("GET", "http://localhost:8080/movies/id/" + currentMovie.imdbID, true);
+        request.open("GET", "/movies/id/" + currentMovieId, true);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 let details = JSON.parse(request.responseText);
-                createListItem(details, currentMovie, list);
+                createListItem(details, currentMovieId, list);
             }
         }
         request.send();
     }
 }
 
-function showResultsOfCurrentPage() {
-    // Make AJAX request to get the results
-    const request = new XMLHttpRequest();
-    request.open("GET", "http://localhost:8080/movies/search?term=" + term + "&page=" + page, true);
-    request.onreadystatechange = function () {
-        if (request.readyState === 4 && request.status === 200) {
-            // Show movie results when the api responds
-            let response = JSON.parse(request.responseText);
-            let results = response.Search;
-            if (results) {
-                page++;
-                showResults(results);
-            }
-        }
-    };
-    request.send();
-}
-
-function search() {
-    // Declare variables
-    let input = document.getElementById('input-term');
-    term = input.value.toLowerCase().replace(" ", "+");
-
-    let list = document.getElementById("result-list");
-
-    if (term.length < 4) {
-        return;
-    }
-
-    list.innerHTML = '';
-
-    page = 1;
-    showResultsOfCurrentPage();
+function deleteFromFavorites(id) {
 
 }
 
@@ -135,7 +123,7 @@ function toggleMore(id) {
 
         // Make AJAX request to get the results
         const request = new XMLHttpRequest();
-        request.open("GET", "http://localhost:8080/movies?id=" + id + "&plot=" + "full", true);
+        request.open("GET", "/movies?id=" + id + "&plot=" + "full", true);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 // Typical action to be performed when the document is ready:
@@ -153,59 +141,20 @@ function toggleMore(id) {
     }
 }
 
-function setShowMoreListener() {
+function setMoreAndDeleteListener() {
     const list = document.getElementById("result-list");
     list.addEventListener("click", function (e) {
         if (e.target.nodeName === "BUTTON" && e.target.className === "more-btn") {
             toggleMore(e.target.parentNode.parentNode.parentNode.parentNode.id);
-        }
-    });
-}
-
-function setScrollListener() {
-    //setup before functions
-    let typingTimer;                //timer identifier
-    let doneTypingInterval = 100;  //time in ms
-
-    //on keyup, start the countdown
-    window.onscroll = function () {
-        clearTimeout(typingTimer);
-        typingTimer = setTimeout(function () {
-            var list = document.getElementById('result-list');
-            var contentHeight = list.offsetHeight;
-            var yOffset = window.pageYOffset;
-            var y = yOffset + window.innerHeight;
-            if (y >= contentHeight) {
-                // Ajax call to get more dynamic data goes here
-                // window.scrollTo(0, 0);
-                console.log("page is " + page);
-                showResultsOfCurrentPage();
-            }
-        }, doneTypingInterval);
-
-    }
-}
-
-function setSearchListener() {
-    //setup before functions
-    let typingTimer;                //timer identifier
-    let doneTypingInterval = 200;  //time in ms
-    let input = document.getElementById('input-term');
-
-    //on keyup, start the countdown
-    input.addEventListener('keyup', () => {
-        clearTimeout(typingTimer);
-        if (input.value) {
-            typingTimer = setTimeout(search, doneTypingInterval);
+        } else if (e.target.nodeName === "BUTTON" && e.target.className === "del-btn") {
+            deleteFromFavorites(e.target.parentNode.parentNode.parentNode.parentNode.id);
         }
     });
 }
 
 window.onload = function () {
-    setShowMoreListener();
-    setSearchListener();
-    setScrollListener();
+    getActiveUser();
+    setMoreAndDeleteListener();
 }
 
-var term, page;
-
+var activeUserId, movieList;

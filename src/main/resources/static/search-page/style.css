@@ -1,27 +1,58 @@
 body {
     font-family: "Open Sans", serif;
+    margin-top: 0;
     margin-left: auto;
     margin-right: auto;
-    width: 70%;
+
 }
+
+/* Navbar styling */
+.topnav {
+    background-color: lightskyblue;
+    overflow: hidden;
+    margin-bottom: 60px;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    /*font-size: 17px;*/
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: deepskyblue;
+    /*color: black;*/
+}
+
+
+
+/* Search input and list styling */
 
 #input-term {
     background-image: url('searchicon.png'); /* Add a search icon to input */
     background-size: 1rem;
     background-position: 10px 12px; /* Position the search icon */
     background-repeat: no-repeat; /* Do not repeat the icon image */
-    width: 95%; /* Full-width */
+    width: 70%;
     font-size: 18px; /* Increase font-size */
     padding: 12px 20px 12px 40px; /* Add some padding */
     border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
+    margin: auto auto 12px auto;
+    display: block;
 }
 
 #result-list {
     /* Remove default list styling */
     list-style-type: none;
     padding: 0;
-    margin: 0;
+    margin: auto;
+    width: 70%;
+
 }
 
 #result-list li {
@@ -62,7 +93,6 @@ li button {
     cursor: pointer;
     margin: 5px;
 }
-
 
 .info-container {
     display: flex;
