@@ -1,5 +1,9 @@
-package com.example.moviesprojectapi;
+package com.example.moviesapi.controllers;
 
+import com.example.moviesapi.util.PasswordEncryptor;
+import com.example.moviesapi.util.SessionDetails;
+import com.example.moviesapi.repositories.UserRepository;
+import com.example.moviesapi.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -31,10 +35,10 @@ public class UsersController {
             System.out.println("Redirecting user " + SessionDetails.getActiveUserId() + " to search page...");
             try {
                 httpResponse.sendRedirect("/search_page");
-                return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+                return new ResponseEntity<>(HttpStatus.OK);
             } catch (IOException e) {
                 e.printStackTrace();
-                return new ResponseEntity<HttpStatus>(HttpStatus.SERVICE_UNAVAILABLE);
+                return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
             }
         } else {
             System.out.println("Login fail");
@@ -43,7 +47,7 @@ public class UsersController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return new ResponseEntity<HttpStatus>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -59,7 +63,7 @@ public class UsersController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            return new ResponseEntity<HttpStatus>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             User user = new User(email, PasswordEncryptor.toSHA1(password));
             this.userRepository.save(user);
@@ -68,10 +72,10 @@ public class UsersController {
             System.out.println("Redirecting user " + SessionDetails.getActiveUserId() + " to search page...");
             try {
                 httpResponse.sendRedirect("/search_page");
-                return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
+                return new ResponseEntity<>(HttpStatus.CREATED);
             } catch (IOException e) {
                 e.printStackTrace();
-                return new ResponseEntity<HttpStatus>(HttpStatus.SERVICE_UNAVAILABLE);
+                return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
             }
         }
     }
@@ -85,17 +89,17 @@ public class UsersController {
     public ResponseEntity<HttpStatus> logout(HttpServletResponse httpResponse) {
         System.out.println("Logout request");
         if (SessionDetails.getActiveUserId() == -1) {
-            return new ResponseEntity<HttpStatus>(HttpStatus.SERVICE_UNAVAILABLE);
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
         System.out.println("Logged out user " + SessionDetails.getActiveUserId() + " successfully");
         System.out.println("Redirecting to login page...");
         SessionDetails.clearActiveUser();
         try {
             httpResponse.sendRedirect("/login_page");
-            return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
-            return new ResponseEntity<HttpStatus>(HttpStatus.SERVICE_UNAVAILABLE);
+            return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 

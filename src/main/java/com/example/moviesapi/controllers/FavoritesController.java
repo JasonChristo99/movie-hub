@@ -1,5 +1,8 @@
-package com.example.moviesprojectapi;
+package com.example.moviesapi.controllers;
 
+import com.example.moviesapi.repositories.FavoriteRepository;
+import com.example.moviesapi.util.SessionDetails;
+import com.example.moviesapi.model.Favorite;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,16 +22,16 @@ public class FavoritesController {
         this.favoriteRepository = favoriteRepository;
     }
 
-    @PostMapping(value = "/favorite", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping(value = "/favorites", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<HttpStatus> favoriteMovie(@RequestParam(value = "movieId") String movieId,
                                                     HttpServletResponse httpResponse) {
         if (SessionDetails.getActiveUserId() == -1) {
-            return new ResponseEntity<HttpStatus>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
         System.out.println("Favorite request: user " + SessionDetails.getActiveUserId() + " for " + movieId);
         Favorite favorite = new Favorite(SessionDetails.getActiveUserId(), movieId);
         favoriteRepository.save(favorite);
-        return new ResponseEntity<HttpStatus>(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/favorites/all")

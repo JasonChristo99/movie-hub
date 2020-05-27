@@ -1,4 +1,4 @@
-package com.example.moviesprojectapi;
+package com.example.moviesapi.util;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;

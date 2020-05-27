@@ -1,4 +1,4 @@
-package com.example.moviesprojectapi;
+package com.example.moviesapi.model;
 
 import java.io.Serializable;
 

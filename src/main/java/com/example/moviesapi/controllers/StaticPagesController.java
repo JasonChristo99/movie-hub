@@ -1,5 +1,6 @@
-package com.example.moviesprojectapi;
+package com.example.moviesapi.controllers;
 
+import com.example.moviesapi.util.SessionDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -7,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
-public class TemplateController {
+public class StaticPagesController {
     @GetMapping(value = "/search_page")
     public String showSearch() {
         if (SessionDetails.getActiveUserId() == -1) {

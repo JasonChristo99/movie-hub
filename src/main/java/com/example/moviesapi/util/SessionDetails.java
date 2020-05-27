@@ -1,4 +1,4 @@
-package com.example.moviesprojectapi;
+package com.example.moviesapi.util;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,7 @@ public class SessionDetails implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         activeUserId = -1;
     }
 }

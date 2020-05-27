@@ -1,3 +1,4 @@
+//Sets the favorite movies list of the user
 function getFavoriteMoviesOfUser() {
     const request = new XMLHttpRequest();
     request.open("GET", "/favorites/" + activeUserId + "/all", true);
@@ -10,6 +11,7 @@ function getFavoriteMoviesOfUser() {
     request.send();
 }
 
+//Sets the user id of the current user by calling the backend
 function getActiveUser() {
     const request = new XMLHttpRequest();
     request.open("GET", "/users/active", true);
@@ -22,6 +24,7 @@ function getActiveUser() {
     request.send();
 }
 
+//Creates and appends a movie item to the result list
 function createListItem(details, currentMovie, list) {
     let title = details.Title;
     let imdbID = details.imdbID;
@@ -49,7 +52,7 @@ function createListItem(details, currentMovie, list) {
     if (posterUrl !== "N/A") {
         poster.setAttribute("src", posterUrl);
     } else {
-        poster.setAttribute("src", "search_page/noimage.png");
+        poster.setAttribute("src", "search-page/noimage.png");
     }
     // set title
     let textTitle = newItem.querySelector(".title");
@@ -80,6 +83,7 @@ function createListItem(details, currentMovie, list) {
     list.appendChild(newItem);
 }
 
+//Gathers the movies details and calls createListItem
 function showMovies() {
     let list = document.getElementById("result-list");
     list.innerHTML='';
@@ -89,7 +93,7 @@ function showMovies() {
 
         // Make AJAX request to get the detailed results
         const request = new XMLHttpRequest();
-        request.open("GET", "/movies/id/" + currentMovieId, true);
+        request.open("GET", "/movies/" + currentMovieId, true);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 let details = JSON.parse(request.responseText);
@@ -100,6 +104,7 @@ function showMovies() {
     }
 }
 
+//Deletes a movie from the user's favorites
 function deleteFromFavorites(id) {
     // Make AJAX request to get the detailed results
     const request = new XMLHttpRequest();
@@ -112,6 +117,7 @@ function deleteFromFavorites(id) {
     request.send();
 }
 
+//Shows more details for the selected movie
 function toggleMore(id) {
     // Change text on click
     let listItem = document.getElementById(id);
@@ -136,7 +142,7 @@ function toggleMore(id) {
 
         // Make AJAX request to get the results
         const request = new XMLHttpRequest();
-        request.open("GET", "/movies?id=" + id + "&plot=" + "full", true);
+        request.open("GET", "/movies/" + id + "/full", true);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 // Typical action to be performed when the document is ready:
@@ -154,6 +160,7 @@ function toggleMore(id) {
     }
 }
 
+//Sets 'onclick' listener for the 'more' and 'delete' buttons
 function setMoreAndDeleteListener() {
     const list = document.getElementById("result-list");
     list.addEventListener("click", function (e) {

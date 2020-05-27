@@ -1,3 +1,4 @@
+//Creates and appends a movie item to the result list
 function createListItem(details, currentMovie, list) {
     let title = details.Title;
     let year = details.Year;
@@ -24,7 +25,7 @@ function createListItem(details, currentMovie, list) {
     if (posterUrl !== "N/A") {
         poster.setAttribute("src", posterUrl);
     } else {
-        poster.setAttribute("src", "search_page/noimage.png");
+        poster.setAttribute("src", "search-page/noimage.png");
     }
     // set title
     let textTitle = newItem.querySelector(".title");
@@ -55,6 +56,7 @@ function createListItem(details, currentMovie, list) {
     list.appendChild(newItem);
 }
 
+//Gathers info for each result movie and calls createListItem
 function showResults(results) {
     // Declare variables
     let list = document.getElementById("result-list");
@@ -65,7 +67,7 @@ function showResults(results) {
 
         // Make AJAX request to get the detailed results
         const request = new XMLHttpRequest();
-        request.open("GET", "http://localhost:8080/movies/id/" + currentMovie.imdbID, true);
+        request.open("GET", "/movies/" + currentMovie.imdbID, true);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 let details = JSON.parse(request.responseText);
@@ -76,10 +78,11 @@ function showResults(results) {
     }
 }
 
+//Actually performs the search operation by making an AJAX call to the backend api
 function showResultsOfCurrentPage() {
     // Make AJAX request to get the results
     const request = new XMLHttpRequest();
-    request.open("GET", "http://localhost:8080/movies/search?term=" + term + "&page=" + page, true);
+    request.open("GET", "/movies?term=" + term + "&page=" + page, true);
     request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200) {
             // Show movie results when the api responds
@@ -94,6 +97,7 @@ function showResultsOfCurrentPage() {
     request.send();
 }
 
+//Calls the search operation when necessary
 function search() {
     // Declare variables
     let input = document.getElementById('input-term');
@@ -101,7 +105,7 @@ function search() {
 
     let list = document.getElementById("result-list");
 
-    if (term.length < 4) {
+    if (term.length < 3) {
         return;
     }
 
@@ -112,6 +116,7 @@ function search() {
 
 }
 
+//Shows more details for the selected movie
 function toggleMore(id) {
     // Change text on click
     let listItem = document.getElementById(id);
@@ -136,7 +141,7 @@ function toggleMore(id) {
 
         // Make AJAX request to get the results
         const request = new XMLHttpRequest();
-        request.open("GET", "http://localhost:8080/movies?id=" + id + "&plot=" + "full", true);
+        request.open("GET", "/movies/" + id + "/full", true);
         request.onreadystatechange = function () {
             if (request.readyState === 4 && request.status === 200) {
                 // Typical action to be performed when the document is ready:
@@ -154,9 +159,10 @@ function toggleMore(id) {
     }
 }
 
+//Adds the selected movie to the user's favorites
 function addToFavorites(id) {
     var http = new XMLHttpRequest();
-    var url = 'favorite';
+    var url = '/favorites';
     var params = 'movieId=' + id;
     http.open('POST', url, true);
 
@@ -171,6 +177,7 @@ function addToFavorites(id) {
     http.send(params);
 }
 
+//Sets 'onclick' listener for the 'more' and 'favorite' buttons
 function setMoreAndFavListener() {
     const list = document.getElementById("result-list");
     list.addEventListener("click", function (e) {
@@ -182,6 +189,7 @@ function setMoreAndFavListener() {
     });
 }
 
+//Sets 'onscroll' listener so when the user reaches the end of the page, more results are being showed
 function setScrollListener() {
     //setup before functions
     let typingTimer;                //timer identifier
@@ -206,10 +214,11 @@ function setScrollListener() {
     }
 }
 
+//Sets 'onkeyup' listener so when the user finishes typing, the search is performed
 function setSearchListener() {
     //setup before functions
     let typingTimer;                //timer identifier
-    let doneTypingInterval = 200;  //time in ms
+    let doneTypingInterval = 400;  //time in ms
     let input = document.getElementById('input-term');
 
     //on keyup, start the countdown

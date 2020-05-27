@@ -1,5 +1,6 @@
-package com.example.moviesprojectapi;
+package com.example.moviesapi.repositories;
 
+import com.example.moviesapi.model.Favorite;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
